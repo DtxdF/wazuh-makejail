@@ -32,4 +32,4 @@ opensearchDashboards.branding:
 #   faviconUrl: ""
    applicationTitle: "on FreeBSD"
 
-uiSettings.overrides.defaultRoute: /app/wazuh
+uiSettings.overrides.defaultRoute: /app/wz-home
