@@ -4,7 +4,7 @@
 
 sync_localtime()
 {
-    cp /etc/localtime /var/ossec/etc/localtime
+    exec_cmd_stdout "cp /etc/localtime /var/ossec/etc/localtime"
 }
 
 create_active_responses()
