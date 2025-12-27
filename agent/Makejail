@@ -1,0 +1,13 @@
+OPTION start
+OPTION overwrite=force
+
+PKG wazuh-agent gsed
+
+CMD chown wazuh:wazuh /var/ossec/etc/client.keys
+
+COPY scripts
+
+RUN /scripts/init.sh
+
+SYSRC wazuh_agent_enable=YES
+SERVICE wazuh-agent start

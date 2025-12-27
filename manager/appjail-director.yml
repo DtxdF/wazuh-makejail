@@ -1,0 +1,32 @@
+options:
+  - virtualnet: ':<random> address:10.0.0.80 default'
+  - nat:
+  - osversion: '14.3-RELEASE'
+  - label: 'security-group:1'
+  - label: 'security-group.rules.allow-pkg-custom:pass on ajnet proto tcp from %i to 100.65.139.52 port 4080'
+  - copydir: 'user-files'
+  - file: '/usr/local/etc/pkg/repos/Latest.conf'
+  - file: '/usr/local/etc/pkg/repos/Custom.conf'
+  - file: '/wazuh-config-mount'
+  - file: '/entrypoint-scripts'
+  - template: 'files/template.conf'
+services:
+  wazuh-manager:
+    name: wazuh-manager
+    environment:
+      - WAZUH_NODE_NAME: 'manager'
+      - WAZUH_CLUSTER_NODES: 'wazuh-manager'
+      - WAZUH_CLUSTER_BIND_ADDR: 'wazuh-manager'
+      - INDEXER_USERNAME: 'admin'
+      - INDEXER_PASSWORD: 'admin'
+      - API_USERNAME: 'wazuh-wui'
+      - API_PASSWORD: 'MyS3cr37P450r.*-'
+    volumes:
+      - wazuh-data: /data
+      - wazuh-pkgcache: /var/cache/pkg
+volumes:
+  wazuh-data:
+    device: /var/appjail-volumes/wazuh/data
+  wazuh-pkgcache:
+    device: /var/appjail-volumes/wazuh/pkgcache
+    type: nullfs

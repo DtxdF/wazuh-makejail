@@ -1,0 +1,30 @@
+OPTION start
+OPTION overwrite=force
+
+PKG wazuh-manager gsed bash
+
+COPY scripts
+
+CMD mkdir -p /usr/local/etc/rc.d
+COPY files/wazuh-manager-mount.in /usr/local/etc/rc.d/wazuh-manager-mount
+CMD chmod +x /usr/local/etc/rc.d/wazuh-manager-mount
+
+CMD set -o pipefail; set -xe; mkdir -p /config && \
+    for f in permanent_data.env create_user.py; do \
+        fetch -o /config/${f} https://github.com/wazuh/wazuh-docker/raw/refs/heads/main/build-docker-images/wazuh-manager/config/${f}; \
+    done && \
+    mv /config/permanent_data.env /permanent_data.env && \
+    bash /scripts/permanent_data.sh && \
+    mv /config/create_user.py /var/ossec/framework/scripts/create_user.py && \
+    chown root:wazuh /var/ossec/framework/scripts/create_user.py && \
+    rmdir /config && \
+    mkdir -p /var/ossec/var/multigroups && \
+    chown root:wazuh /var/ossec/var/multigroups && \
+    chmod 770 /var/ossec/var/multigroups && \
+    mkdir -p /var/ossec/active-response/bin && \
+    chown root:wazuh /var/ossec/active-response/bin && \
+    chmod 770 /var/ossec/active-response/bin
+RUN /scripts/init.sh
+
+SYSRC wazuh_manager_enable=YES
+SERVICE wazuh-manager start

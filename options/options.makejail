@@ -1,5 +1,0 @@
-OPTION template=files/template.conf
-OPTION resolv_conf
-OPTION tzdata
-OPTION overwrite=force
-OPTION start

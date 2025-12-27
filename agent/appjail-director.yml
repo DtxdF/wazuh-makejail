@@ -1,0 +1,21 @@
+options:
+  - virtualnet: ':<random> default'
+  - nat:
+  - osversion: '14.3-RELEASE'
+  - label: 'security-group:1'
+  - label: 'security-group.rules.allow-manager-conn:pass on appjail_epair proto udp from %i to 10.0.0.80/32 port 1514'
+  - label: 'security-group.rules.allow-manager-auth:pass on appjail_epair proto tcp from %i to 10.0.0.80/32 port 1515'
+  - label: 'security-group.rules.allow-pkg-custom:pass on ajnet proto tcp from %i to 100.65.139.52 port 4080'
+  - copydir: 'user-files'
+  - file: '/usr/local/etc/pkg/repos/Latest.conf'
+  - file: '/usr/local/etc/pkg/repos/Custom.conf'
+  - file: '/wazuh-config-mount'
+  - file: '/entrypoint-scripts'
+  - template: 'files/template.conf'
+services:
+  wazuh-agent:
+    name: wazuh-agent
+    environment:
+      - WAZUH_MANAGER_SERVER: '10.0.0.80'
+      - WAZUH_REGISTRATION_PASSWORD: 'fhlc0egBAfx0vZMWoJig4bhZjPgxG8tKEM0yTBfd50Q'
+      - WAZUH_AGENT_NAME: 'wazuh-agent-poc'
