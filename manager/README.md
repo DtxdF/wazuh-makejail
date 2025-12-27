@@ -19,7 +19,7 @@ It is worth noting the initialization script, which is a combination of all the 
 2. `/etc/localtime` is copied to `/var/ossec/etc/localtime`, so it should exist.
 3. `/var/ossec/etc/sslmanager.key` must exist, or the script will create both the key and the certificate, which are not recreated when the jail is recreated, as they must exist on the volume.
 4. `/wazuh-config-mount`, when mounted, the files are copied as-is to `/var/ossec`.
-5. If you have `<node_name>to_be_replaced_by_hostname<\/node_name>/<node_name>` in your ossec.conf configuration file, the value of this setting can be changed with the value of `HOSTNAME`. See also: https://documentation.wazuh.com/current/user-manual/reference/ossec-conf/cluster.html#node-name
+5. If you have `<node_name>to_be_replaced_by_hostname</node_name>` in your ossec.conf configuration file, the value of this setting can be changed with the value of `HOSTNAME`. See also: https://documentation.wazuh.com/current/user-manual/reference/ossec-conf/cluster.html#node-name
 6. `<cluster><key></key></cluster>` can be changed using the environment variable `WAZUH_CLUSTER_KEY`. See also: https://documentation.wazuh.com/current/user-manual/reference/ossec-conf/cluster.html#key
 7. `<cluster><node_name></node_name></cluster>`can be changed using the environment variable `WAZUH_NODE_NAME` which by default use the value of `HOSTNAME`. See also: https://documentation.wazuh.com/current/user-manual/reference/ossec-conf/cluster.html#node-name
 8. `WAZUH_INDEXER_HOSTS`, unlike what the Wazuh team implemented in Docker, where hosts are separated by commas, in this case they are separated by spaces. See also: https://documentation.wazuh.com/current/user-manual/reference/ossec-conf/indexer.html#hosts
