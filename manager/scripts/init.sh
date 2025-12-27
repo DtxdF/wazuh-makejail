@@ -24,7 +24,7 @@ mount_files()
 {
     if [ -e "/wazuh-config-mount" ]; then
         info "Identified Wazuh configuration files to mount..."
-        exec_cmd_stdout "cp -RpL /wazuh-config-mount/ /var/ossec"
+        exec_cmd_stdout "cp -va /wazuh-config-mount/ /var/ossec"
     else
         info "No Wazuh configuration files to mount..."
     fi
