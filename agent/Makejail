@@ -3,6 +3,7 @@ OPTION overwrite=force
 
 PKG wazuh-agent gsed
 
+# Workaround: wazuh-agentd: ERROR: (1103): Could not open file 'etc/client.keys' due to [(13)-(Permission denied)].
 CMD chown wazuh:wazuh /var/ossec/etc/client.keys
 
 COPY scripts
