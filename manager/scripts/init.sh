@@ -200,8 +200,8 @@ entrypoint_scripts()
 {
     # It will run every .sh script located in entrypoint-scripts folder in lexicographical order
     if [ -d "/entrypoint-scripts/" ]; then
-        for script in `ls /entrypoint-scripts/* | sort -n`; do
-            "$script"
+        for script in `ls /entrypoint-scripts/*.sh | sort -n`; do
+            /bin/sh "$script"
         done
     fi
 }
