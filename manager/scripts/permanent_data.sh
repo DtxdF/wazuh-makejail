@@ -14,9 +14,9 @@ tar -C / -cf - ${PERMANENT_DATA[@]} | tar -C /data --strip-components=2 -xvpkf -
 info "Updating non-permanent data in permanent data volume"
 tar -C / -cf - ${PERMANENT_DATA_EXCP[@]} | tar -C /data --strip-components=2 -xvpf - || exit $?
 
-info "Creating symlinks to permanent data"
+info "Preparing nullfs mount points"
 for f in ${PERMANENT_DATA[@]} ${PERMANENT_DATA_EXCP[@]}; do
-    # Only create symlinks to directories.
+    # Only nullfs to directories.
     if [ ! -d "${f}" ]; then
         continue
     fi
