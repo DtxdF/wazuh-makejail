@@ -1,4 +1,10 @@
 nodes:
   server:
-    - name: wazuh
+    - name: wazuh-1
       ip: "10.0.0.80"
+  indexer:
+    - name: node-1
+      ip: "10.0.0.81"
+  dashboard:
+    - name: dashboard
+      ip: "10.0.0.82"
