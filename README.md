@@ -8,5 +8,6 @@ Take a look at each component to see the implementation notes and other related 
 
 - [X] [manager](manager/README.md)
 - [X] [agent](agent/README.md)
+- [X] [certs-generator](certs-generator/README.md)
 - [ ] indexer
 - [ ] dashboard

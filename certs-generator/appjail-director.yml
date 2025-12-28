@@ -1,0 +1,14 @@
+options:
+  - virtualnet: ':<random> default'
+  - nat:
+services:
+  generator:
+    name: wazuh-certs-generator
+    volumes:
+      - ssl-certs: /certificates
+      - config: /config
+volumes:
+  ssl-certs:
+    device: user-files/certs
+  config:
+    device: user-files/config

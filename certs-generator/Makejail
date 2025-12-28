@@ -1,0 +1,12 @@
+OPTION start
+OPTION overwrite=force
+
+PKG bash gawk gnugrep gsed curl
+
+COPY config/entrypoint.sh /
+
+CMD chmod 700 /entrypoint.sh
+
+ENV CERT_TOOL_VERSION=4.14
+
+RUN /entrypoint.sh

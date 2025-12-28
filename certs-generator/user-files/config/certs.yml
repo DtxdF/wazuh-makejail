@@ -1,0 +1,4 @@
+nodes:
+  server:
+    - name: wazuh
+      ip: "10.0.0.80"
