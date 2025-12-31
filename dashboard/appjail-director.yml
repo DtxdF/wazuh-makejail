@@ -1,0 +1,33 @@
+options:
+  - virtualnet: ':<random> address:10.0.0.82 default'
+  - nat:
+  - osversion: '14.3-RELEASE'
+  - label: 'security-group:1'
+  - label: 'security-group.rules.allow-api:pass on appjail_epair proto tcp from %i to 10.0.0.80 port 55000'
+  - label: 'security-group.rules.allow-indexer:pass on appjail_epair proto tcp from %i to 10.0.0.81 port 9200'
+  - label: 'security-group.rules.allow-pkg-custom:pass on ajnet proto tcp from %i to 100.65.139.52 port 4080'
+  - copydir: 'user-files'
+  - file: '/usr/local/etc/pkg/repos/Latest.conf'
+  - file: '/usr/local/etc/pkg/repos/Custom.conf'
+  - template: 'files/template.conf'
+services:
+  wazuh-dashboard:
+    name: wazuh-dashboard
+    volumes:
+      - dashboard-certs: /usr/local/etc/opensearch-dashboards/certs
+      - dashboard-data: /usr/local/www/opensearch-dashboards/data
+    arguments:
+      - opensearch_addr: '10.0.0.81'
+      - wazuh_api_url: 'https://10.0.0.80'
+      - wazuh_api_password: 'MyS3cr37P450r.*-'
+volumes:
+  dashboard-certs:
+    device: /var/appjail-volumes/wazuh-dashboard/certs
+    owner: 0
+    group: 0
+    mode: 0755
+  dashboard-data:
+    device: /var/appjail-volumes/wazuh-dashboard/data
+    owner: 80
+    group: 80
+    mode: 0755

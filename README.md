@@ -10,4 +10,4 @@ Take a look at each component to see the implementation notes and other related 
 - [X] [agent](agent/README.md)
 - [X] [certs-generator](certs-generator/README.md)
 - [X] [indexer](indexer/README.md)
-- [ ] dashboard
+- [X] [dashboard](dashboard/README.md)

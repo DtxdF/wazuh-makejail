@@ -1,0 +1,7 @@
+hosts:
+  - default:
+      url: '%{WAZUH_API_URL}'
+      port: '%{WAZUH_API_PORT}'
+      username: '%{WAZUH_API_USERNAME}'
+      password: '%{WAZUH_API_PASSWORD}'
+      run_as: false

@@ -1,0 +1,44 @@
+ARG opensearch_addr
+ARG wazuh_api_url
+ARG wazuh_api_password
+ARG opensearch_port=9200
+ARG opensearch_username=admin
+ARG opensearch_password=admin
+ARG wazuh_api_port=55000
+ARG wazuh_api_username=wazuh-wui
+
+OPTION start
+OPTION overwrite=force
+
+PKG wazuh-dashboard
+
+COPY files/opensearch_dashboards.yml /usr/local/etc/opensearch-dashboards/opensearch_dashboards.yml
+CMD chown root:www /usr/local/etc/opensearch-dashboards/opensearch_dashboards.yml
+CMD chmod 640 /usr/local/etc/opensearch-dashboards/opensearch_dashboards.yml
+
+REPLACE /usr/local/etc/opensearch-dashboards/opensearch_dashboards.yml OPENSEARCH_ADDR ${opensearch_addr}
+REPLACE /usr/local/etc/opensearch-dashboards/opensearch_dashboards.yml OPENSEARCH_PORT ${opensearch_port}
+REPLACE /usr/local/etc/opensearch-dashboards/opensearch_dashboards.yml OPENSEARCH_USERNAME ${opensearch_username}
+REPLACE /usr/local/etc/opensearch-dashboards/opensearch_dashboards.yml OPENSEARCH_PASSWORD ${opensearch_password}
+
+CMD mkdir -p /usr/local/www/opensearch-dashboards/data/wazuh
+CMD chown www:www /usr/local/www/opensearch-dashboards/data/wazuh
+CMD chmod 755 /usr/local/www/opensearch-dashboards/data/wazuh
+
+CMD mkdir -p /usr/local/www/opensearch-dashboards/data/wazuh/config
+CMD chown www:www /usr/local/www/opensearch-dashboards/data/wazuh/config
+CMD chmod 755 /usr/local/www/opensearch-dashboards/data/wazuh/config
+
+COPY files/wazuh.yml /usr/local/www/opensearch-dashboards/data/wazuh/config/wazuh.yml
+CMD chown www:www /usr/local/www/opensearch-dashboards/data/wazuh/config/wazuh.yml
+CMD chmod 600 /usr/local/www/opensearch-dashboards/data/wazuh/config/wazuh.yml
+
+REPLACE /usr/local/www/opensearch-dashboards/data/wazuh/config/wazuh.yml WAZUH_API_URL ${wazuh_api_url}
+REPLACE /usr/local/www/opensearch-dashboards/data/wazuh/config/wazuh.yml WAZUH_API_PORT ${wazuh_api_port}
+REPLACE /usr/local/www/opensearch-dashboards/data/wazuh/config/wazuh.yml WAZUH_API_USERNAME ${wazuh_api_username}
+REPLACE /usr/local/www/opensearch-dashboards/data/wazuh/config/wazuh.yml WAZUH_API_PASSWORD ${wazuh_api_password}
+
+SYSRC opensearch_dashboards_enable=YES
+SYSRC opensearch_dashboards_syslog_output_enable=YES
+
+SERVICE opensearch-dashboards start
