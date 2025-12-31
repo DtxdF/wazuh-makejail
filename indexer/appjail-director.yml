@@ -1,0 +1,39 @@
+options:
+  - virtualnet: ':<random> address:10.0.0.81 default'
+  - nat:
+  - osversion: '14.3-RELEASE'
+  - label: 'security-group:1'
+  - label: 'security-group.rules.allow-pkg-custom:pass on ajnet proto tcp from %i to 100.65.139.52 port 4080'
+  - copydir: 'user-files'
+  - file: '/usr/local/etc/pkg/repos/Latest.conf'
+  - file: '/usr/local/etc/pkg/repos/Custom.conf'
+  - template: 'files/template.conf'
+services:
+  wazuh-indexer:
+    name: wazuh-indexer
+    volumes:
+      - opensearch-certs: /usr/local/etc/opensearch/certs
+      - opensearch-data: /var/db/opensearch
+      - beats-data: /var/db/beats
+      - wazuh-alerts: /var/ossec/logs/alerts
+    arguments:
+      - wazuh_indexer_addr: '10.0.0.81'
+volumes:
+  opensearch-certs:
+    device: /var/appjail-volumes/wazuh-indexer/opensearch-certs
+    owner: 0
+    group: 855
+    mode: 0755
+  opensearch-data:
+    device: /var/appjail-volumes/wazuh-indexer/opensearch-data
+    owner: 855
+    group: 855
+    mode: 0755
+  beats-data:
+    device: /var/appjail-volumes/wazuh-indexer/beats-data
+    owner: 0
+    group: 0
+    mode: 0755
+  wazuh-alerts:
+    device: /var/appjail-volumes/wazuh/data/logs/alerts
+    options: ro

@@ -1,0 +1,55 @@
+%{WAZUH_FILEBEAT_MODULE_VER:0.4}
+
+ARG wazuh_indexer_addr
+
+OPTION start
+OPTION overwrite=force
+
+CMD echo "======> Installing packages <======"
+PKG beats7 logstash8 opensearch219
+
+CMD echo "======> Installing Wazuh module for filebeat <======"
+CMD cd /tmp && \
+    fetch https://packages.wazuh.com/4.x/filebeat/wazuh-filebeat-%{WAZUH_FILEBEAT_MODULE_VER}.tar.gz && \
+    tar -C /usr/local/share/beats/filebeat/module -xf wazuh-filebeat-%{WAZUH_FILEBEAT_MODULE_VER}.tar.gz && \
+    rm -f wazuh-filebeat-%{WAZUH_FILEBEAT_MODULE_VER}.tar.gz
+
+CMD echo "======> Installing logstash-output-opensearch plugin <======"
+CMD cd /usr/local/logstash/bin && \
+    env JAVA_HOME=/usr/local/openjdk21 DEBUG=1 \
+        ./logstash-plugin install logstash-output-opensearch
+
+CMD echo "======> OpenSearch <======"
+COPY files/opensearch.yml /usr/local/etc/opensearch/opensearch.yml
+CMD chown opensearch:opensearch /usr/local/etc/opensearch/opensearch.yml
+CMD chmod 640 /usr/local/etc/opensearch/opensearch.yml
+SYSRC opensearch_enable=YES
+SERVICE opensearch start
+
+CMD echo "======> Waiting for OpenSearch <======"
+CMD while ! nc -z -v 127.0.0.1 9200 > /dev/null 2>&1; do sleep 1; done
+
+CMD echo "======> Initializing OpenSearch security index <======"
+CMD env OPENSEARCH_JAVA_HOME=/usr/local/openjdk17 \
+        bash /usr/local/lib/opensearch/plugins/opensearch-security/tools/securityadmin.sh \
+            -cd /usr/local/etc/opensearch/opensearch-security \
+            -cacert /usr/local/etc/opensearch/certs/root-ca.pem \
+            -cert /usr/local/etc/opensearch/certs/admin.pem \
+            -key /usr/local/etc/opensearch/certs/admin-key.pem \
+            -h ${wazuh_indexer_addr} -p 9200 -icl -nhnv
+
+CMD echo "======> Logstash <======"
+CMD cd /usr/local/etc/logstash && \
+    fetch https://raw.githubusercontent.com/wazuh/wazuh/v4.14.1/extensions/elasticsearch/7.x/wazuh-template.json
+COPY files/logstash.conf /usr/local/etc/logstash/logstash.conf
+CMD chown root:wheel /usr/local/etc/logstash/logstash.conf
+CMD chmod 644 /usr/local/etc/logstash/logstash.conf
+SYSRC logstash_enable=YES
+SERVICE logstash start
+
+CMD echo "======> Filebeat <======"
+COPY files/filebeat.yml /usr/local/etc/beats/filebeat.yml
+CMD chown root:wheel /usr/local/etc/beats/filebeat.yml
+CMD chmod 644 /usr/local/etc/beats/filebeat.yml
+SYSRC filebeat_enable=YES
+SERVICE filebeat start
