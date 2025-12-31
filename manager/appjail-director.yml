@@ -4,6 +4,7 @@ options:
   - osversion: '14.3-RELEASE'
   - label: 'security-group:1'
   - label: 'security-group.rules.allow-pkg-custom:pass on ajnet proto tcp from %i to 100.65.139.52 port 4080'
+  - label: 'security-group.rules.allow-indexer:pass on appjail_epair proto tcp from %i to 10.0.0.81 port 9200'
   - copydir: 'user-files'
   - file: '/usr/local/etc/pkg/repos/Latest.conf'
   - file: '/usr/local/etc/pkg/repos/Custom.conf'
@@ -17,16 +18,21 @@ services:
       - WAZUH_NODE_NAME: 'manager'
       - WAZUH_CLUSTER_NODES: 'wazuh-manager'
       - WAZUH_CLUSTER_BIND_ADDR: 'wazuh-manager'
+      - WAZUH_INDEXER_HOSTS: '10.0.0.81:9200'
       - INDEXER_USERNAME: 'admin'
       - INDEXER_PASSWORD: 'admin'
       - API_USERNAME: 'wazuh-wui'
       - API_PASSWORD: 'MyS3cr37P450r.*-'
     volumes:
       - wazuh-data: /data
+      - wazuh-indexer-connector-certs: /usr/local/etc/logstash/certs
       - wazuh-pkgcache: /var/cache/pkg
 volumes:
   wazuh-data:
     device: /var/appjail-volumes/wazuh/data
+  wazuh-indexer-connector-certs:
+    device: /var/appjail-volumes/wazuh/indexer-connector-certs
+    options: ro
   wazuh-pkgcache:
     device: /var/appjail-volumes/wazuh/pkgcache
     type: nullfs

@@ -30,3 +30,26 @@ It is worth noting the initialization script, which is a combination of all the 
 13. `API_USERNAME` and `API_PASSWORD`, when defined, credentials for Wazuh's API are created and the [create_user.py](https://github.com/wazuh/wazuh-docker/blob/main/build-docker-images/wazuh-manager/config/create_user.py) is executed.
 14. `INDEXER_PASSWORD`, when defined, configures indexer's credentials. `INDEXER_USERNAME` can be defined, too.
 15. `/entrypoint-scripts` can contain scripts that are executed in lexicographical order using `/bin/sh`.
+
+Please note that the [indexer-connector is not optional](https://github.com/wazuh/wazuh/issues/33018), even if you disable it, so Wazuh will attempt to connect to it. Therefore, it is important to place the TLS certificates and keys in the correct location.
+
+```console
+# ls /var/appjail-volumes/wazuh/indexer-connector-certs/
+node-1-key.pem	node-1.pem	root-ca.pem
+```
+
+There, we are using the CA certificate created by the certs-generator tool and the same certificate and key used by OpenSearch, which is not realistic, but useful for this PoC. If you are interested in using a different certificate and key, remember to add the subject to `opensearch.yml` as follows:
+
+```yaml
+...
+plugins.security.nodes_dn:
+- "CN=node-1,OU=Wazuh,O=Wazuh,L=California,C=US"
+...
+```
+
+And this should match with the subject like:
+
+```console
+# openssl x509 -in user-files/certs/node-1.pem -noout -subject
+subject=C=US, L=California, O=Wazuh, OU=Wazuh, CN=node-1
+```
