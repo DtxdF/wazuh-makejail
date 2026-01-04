@@ -6,7 +6,7 @@ OPTION start
 OPTION overwrite=force
 
 CMD echo "======> Installing packages <======"
-PKG beats7 logstash8 opensearch219
+PKG beats8 logstash8 opensearch219
 
 CMD echo "======> Installing Wazuh module for filebeat <======"
 CMD cd /tmp && \
