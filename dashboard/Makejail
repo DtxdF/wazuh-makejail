@@ -4,15 +4,17 @@ ARG wazuh_api_password
 ARG opensearch_port=9200
 ARG opensearch_username=admin
 ARG opensearch_password=admin
+ARG opensearch_conf=files/opensearch_dashboards.yml
 ARG wazuh_api_port=55000
 ARG wazuh_api_username=wazuh-wui
+ARG wazuh_api_conf=files/wazuh.yml
 
 OPTION start
 OPTION overwrite=force
 
 PKG wazuh-dashboard
 
-COPY files/opensearch_dashboards.yml /usr/local/etc/opensearch-dashboards/opensearch_dashboards.yml
+COPY ${opensearch_conf} /usr/local/etc/opensearch-dashboards/opensearch_dashboards.yml
 CMD chown root:www /usr/local/etc/opensearch-dashboards/opensearch_dashboards.yml
 CMD chmod 640 /usr/local/etc/opensearch-dashboards/opensearch_dashboards.yml
 
@@ -29,7 +31,7 @@ CMD mkdir -p /usr/local/www/opensearch-dashboards/data/wazuh/config
 CMD chown www:www /usr/local/www/opensearch-dashboards/data/wazuh/config
 CMD chmod 755 /usr/local/www/opensearch-dashboards/data/wazuh/config
 
-COPY files/wazuh.yml /usr/local/www/opensearch-dashboards/data/wazuh/config/wazuh.yml
+COPY ${wazuh_api_conf} /usr/local/www/opensearch-dashboards/data/wazuh/config/wazuh.yml
 CMD chown www:www /usr/local/www/opensearch-dashboards/data/wazuh/config/wazuh.yml
 CMD chmod 600 /usr/local/www/opensearch-dashboards/data/wazuh/config/wazuh.yml
 
