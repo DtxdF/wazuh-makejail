@@ -12,7 +12,7 @@ PKG logstash8 opensearch219
 
 CMD echo "======> Installing logstash-output-opensearch plugin <======"
 CMD cd /usr/local/logstash/bin && \
-    env JAVA_HOME=/usr/local/openjdk21 DEBUG=1 \
+    env JAVA_HOME=/usr/local/openjdk21 DEBUG=1 LS_JAVA_OPTS="-Xmx2g -Xms1g" \
         ./logstash-plugin install logstash-output-opensearch
 
 CMD echo "======> OpenSearch <======"
