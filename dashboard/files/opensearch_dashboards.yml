@@ -20,3 +20,4 @@ opensearchDashboards.branding:
    loadingLogo:
      defaultUrl: "https://people.freebsd.org/~acm/ports/wazuh/freebsd-mark-logo.png"
    applicationTitle: "on FreeBSD"
+opensearch.requestTimeout: 300000
