@@ -1,7 +1,6 @@
 options:
   - virtualnet: ':<random> default'
   - nat:
-  - osversion: '14.3-RELEASE'
   - label: 'security-group:1'
   - label: 'security-group.rules.allow-manager-conn:pass on appjail_epair proto tcp from %i to 10.0.0.80/32 port 1514'
   - label: 'security-group.rules.allow-manager-auth:pass on appjail_epair proto tcp from %i to 10.0.0.80/32 port 1515'

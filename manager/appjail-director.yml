@@ -1,5 +1,4 @@
 options:
-  - osversion: '14.3-RELEASE'
   - copydir: 'user-files'
   - file: '/usr/local/etc/pkg/repos/Latest.conf'
   - file: '/usr/local/etc/pkg/repos/Custom.conf'

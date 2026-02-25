@@ -1,7 +1,6 @@
 options:
   - virtualnet: ':<random> address:10.0.0.82 default'
   - nat:
-  - osversion: '14.3-RELEASE'
   - label: 'security-group:1'
   - label: 'security-group.rules.allow-api:pass on appjail_epair proto tcp from %i to 10.0.0.80 port 55000'
   - label: 'security-group.rules.allow-indexer:pass on appjail_epair proto tcp from %i to 10.0.0.81 port 9200'

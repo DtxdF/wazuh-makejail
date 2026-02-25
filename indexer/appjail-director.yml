@@ -1,7 +1,6 @@
 options:
   - virtualnet: ':<random> address:10.0.0.81 default'
   - nat:
-  - osversion: '14.3-RELEASE'
   - label: 'security-group:1'
   - label: 'security-group.rules.allow-pkg-custom:pass on ajnet proto tcp from %i to 100.65.139.52 port 4080'
   - copydir: 'user-files'

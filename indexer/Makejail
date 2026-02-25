@@ -26,7 +26,7 @@ CMD echo "======> Waiting for OpenSearch <======"
 CMD while ! nc -z -v 127.0.0.1 9200 > /dev/null 2>&1; do sleep 1; done
 
 CMD echo "======> Initializing OpenSearch security index <======"
-CMD env OPENSEARCH_JAVA_HOME=/usr/local/openjdk17 \
+CMD env OPENSEARCH_JAVA_HOME=/usr/local/openjdk21 \
         bash /usr/local/lib/opensearch/plugins/opensearch-security/tools/securityadmin.sh \
             -cd /usr/local/etc/opensearch/opensearch-security \
             -cacert /usr/local/etc/opensearch/certs/root-ca.pem \
