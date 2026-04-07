@@ -49,5 +49,5 @@ volumes:
     device: /var/appjail-volumes/wazuh/indexer-connector-certs
     options: ro
   wazuh-pkgcache:
-    device: /var/appjail-volumes/wazuh/pkgcache
+    device: /var/cache/wazuh/pkgcache
     type: nullfs

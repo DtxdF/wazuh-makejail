@@ -34,5 +34,5 @@ volumes:
     group: 0
     mode: 0755
   wazuh-indexer-pkgcache:
-    device: /var/appjail-volumes/wazuh-indexer/pkgcache
+    device: /var/cache/appjail/wazuh-indexer/pkgcache
     type: nullfs
