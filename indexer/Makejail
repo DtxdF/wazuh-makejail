@@ -10,6 +10,10 @@ OPTION overwrite=force
 CMD echo "======> Installing packages <======"
 PKG logstash8 opensearch219
 
+RAW wazuh_version=`appjail pkg jail "${APPJAIL_JAILNAME}" rquery -e '%n=wazuh-manager' %v | cut -d_ -f1`
+
+VAR --make-arg-env wazuh_version=${wazuh_version}
+
 CMD echo "======> Installing logstash-output-opensearch plugin <======"
 CMD cd /usr/local/logstash/bin && \
     env JAVA_HOME=/usr/local/openjdk21 DEBUG=1 LS_JAVA_OPTS="-Xmx2g -Xms1g" \
@@ -20,6 +24,7 @@ COPY ${opensearch_conf} /usr/local/etc/opensearch/opensearch.yml
 CMD chown opensearch:opensearch /usr/local/etc/opensearch/opensearch.yml
 CMD chmod 640 /usr/local/etc/opensearch/opensearch.yml
 SYSRC opensearch_enable=YES
+SYSRC opensearch_java_home=/usr/local/openjdk21
 SERVICE opensearch start
 
 CMD echo "======> Waiting for OpenSearch <======"
@@ -36,9 +41,10 @@ CMD env OPENSEARCH_JAVA_HOME=/usr/local/openjdk21 \
 
 CMD echo "======> Logstash <======"
 CMD cd /usr/local/etc/logstash && \
-    fetch https://raw.githubusercontent.com/wazuh/wazuh/v4.14.1/extensions/elasticsearch/7.x/wazuh-template.json
+    fetch https://raw.githubusercontent.com/wazuh/wazuh/v${wazuh_version}/extensions/elasticsearch/7.x/wazuh-template.json
 COPY ${logstash_conf} /usr/local/etc/logstash/logstash.conf
 CMD chown root:wheel /usr/local/etc/logstash/logstash.conf
 CMD chmod 644 /usr/local/etc/logstash/logstash.conf
 SYSRC logstash_enable=YES
+SYSRC logstash_java_home=/usr/local/openjdk21
 SERVICE logstash start
